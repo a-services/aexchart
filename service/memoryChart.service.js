@@ -13,11 +13,11 @@ debug("connected");
  * Extract memory data from database.
  *
  * @param {Date} date     Results should be after or equal this date
- * @param {number} limit  Max number of results
  * @param {number} jump   Averaging over a specified number of measurements
+ * @param {number} limit  Max number of results
  * @returns Result list
  */
-async function findFrom(date, limit, jump) {
+async function findFrom(date, jump, limit) {
   console.log('findFrom:', date);
 
   let coll = db.collection(COLL_MEM);
@@ -85,6 +85,7 @@ async function findGaps() {
  */
 async function calcHourlyAverage(dateStamp, stepMins, numSteps) {
 
+  debug(`[calcHourlyAverage] dateStamp=<${dateStamp}>, stepMins=${stepMins}, numSteps=${numSteps}`);
   let coll = db.collection(COLL_MEM);
   let d1 = Date.parse(dateStamp);
   let d2 = addMinutes(d1, stepMins);
@@ -124,6 +125,7 @@ async function calcHourlyAverage(dateStamp, stepMins, numSteps) {
       });
     }
   }
+  debug('=== result length:', result.length);
   return result;
 }
 
@@ -141,6 +143,11 @@ function avg(b) {
   return s / b.length;
 }
 
+function close() {
+  client.close();
+}
+
 module.exports.findFrom = findFrom;
 module.exports.findGaps = findGaps;
 module.exports.calcHourlyAverage = calcHourlyAverage;
+module.exports.close = close;

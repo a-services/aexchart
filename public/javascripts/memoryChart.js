@@ -1,14 +1,32 @@
-/*
-var daystr = '2021-07-08';
-var limit = 200000;
-var jump = 500;
-$.get(`/data?t=${daystr}T09:01:42&limit=${limit}&jump=${jump}`).then(createChart);
-*/
+/* Calculate hourly average values for the specified date.
+   Set parameters in specific section of `args`
+   and specify section for `a` variable.
 
-var daystr = '2021-07-12';
-var stepMins = 30;
-var numSteps = 50;
-$.get(`/avg?t=${daystr}&m=${stepMins}&n=${numSteps}`).then(createChart);
+   `daystr` should be specified in `Date.parse()` format
+   @see https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Date/parse
+ */
+
+var args = {
+    aexmem_dev: {
+        daystr: '2021-08-31T16:00:00.000+00:00',
+        stepMins: 5,
+        numSteps: 120
+    },
+    aexmem_prod: {
+       daystr: '2021-07-12',
+       stepMins: 30,
+       numSteps: 50
+    }
+};
+var a = args['aexmem_dev'];
+
+$.get('/config').then(config => {
+    a.hostName = config.host_name;
+    $.get(`/avg?t=${encodeURIComponent(a.daystr)}&m=${a.stepMins}&n=${a.numSteps}`).then(
+        createChart
+    );
+});
+
 
 function createChart(cdata) {
     var labels = cdata.map(it => it.t /*.substring(11,23)*/);
@@ -60,7 +78,7 @@ function createChart(cdata) {
                 },
                 title: {
                     display: true,
-                    text: `Free Memory, MB. Average per ${stepMins} mins, MIT PROD (mykpaempap001v.mid.northwell.edu)`
+                    text: `Free Memory, MB. Average per ${a.stepMins} mins, ${a.hostName}`
                 }
             }
         }

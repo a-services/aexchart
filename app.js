@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const memoryChart = require('./service/memoryChart.service');
 const requestChart = require('./service/requestChart.service');
+const config = require('./service/config.service');
 const debug = require('debug')('app');
 
 let app = express();
@@ -38,6 +39,12 @@ app.get('/req_hist', (req, res, next) => {
   requestChart.buildRequestsHistogram(numSteps).then(result => {
     res.send(result);
   })
+});
+
+/* Return configuration settings.
+ */
+app.get('/config', (req, res, next) => {
+  res.send(config);
 });
 
 app.use(function (err, req, res, next) {

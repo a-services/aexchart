@@ -1,3 +1,5 @@
+/* Histogram of the number of requests (server load).
+ */
 
 var numSteps = 20;
 $.get(`/req_hist?n=${numSteps}`).then(createChart);
