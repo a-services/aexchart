@@ -9,34 +9,42 @@ let app = express();
 
 app.use(express.static(path.join(__dirname, 'public')));
 
-app.get('/data', (req, res, next) => {
+/* Extract memory data from database.
+ */
+app.get('/data', async (req, res, next) => {
   let tstamp = req.query.t;
   let limit = parseInt(req.query.limit);
   let jump = parseInt(req.query.jump);
   debug(tstamp);
   debug(limit);
   debug(jump);
-  memoryChart.findFrom(new Date(tstamp), limit, jump).then(result => {
+  await memoryChart.findFrom(new Date(tstamp), limit, jump).then(result => {
     res.send(result);
   })
 });
 
+/* Print time intervail when memory data is available.
+ */
+app.get('/gaps', async (req, res, next) => {
+  await memoryChart.findGaps();
+});
+
 /* Calculate hourly average values for the specified date.
  */
-app.get('/avg', (req, res, next) => {
+app.get('/avg', async (req, res, next) => {
   var dateStamp = req.query.t;
   var stepMins = parseInt(req.query.m);
   var numSteps = parseInt(req.query.n);
-  memoryChart.calcHourlyAverage(dateStamp, stepMins, numSteps).then(result => {
+  await memoryChart.calcHourlyAverage(dateStamp, stepMins, numSteps).then(result => {
     res.send(result);
   })
 });
 
 /* Histogram of the number of requests (server load).
  */
-app.get('/req_hist', (req, res, next) => {
+app.get('/req_hist', async (req, res, next) => {
   var numSteps = parseInt(req.query.n);
-  requestChart.buildRequestsHistogram(numSteps).then(result => {
+  await requestChart.buildRequestsHistogram(numSteps).then(result => {
     res.send(result);
   })
 });
@@ -44,6 +52,7 @@ app.get('/req_hist', (req, res, next) => {
 /* Return configuration settings.
  */
 app.get('/config', (req, res, next) => {
+  console.log("------------- config ----------");
   res.send(config);
 });
 

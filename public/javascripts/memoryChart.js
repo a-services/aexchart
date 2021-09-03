@@ -9,24 +9,40 @@
 var args = {
     aexmem_dev: {
         daystr: '2021-08-31T16:00:00.000+00:00',
-        stepMins: 5,
+        stepMins: 10,
         numSteps: 120
     },
     aexmem_prod: {
-       daystr: '2021-07-12',
+       daystr: '2021-09-01T01:00:00.000+00:00',
        stepMins: 30,
-       numSteps: 50
+       numSteps: 500
     }
 };
-var a = args['aexmem_dev'];
+var a = args['aexmem_prod'];
+var form = document.forms.params;
+form.elements.daystr.value = a.daystr;
+form.elements.stepMins.value = a.stepMins;
+form.elements.numSteps.value = a.numSteps;
 
-$.get('/config').then(config => {
-    a.hostName = config.host_name;
-    $.get(`/avg?t=${encodeURIComponent(a.daystr)}&m=${a.stepMins}&n=${a.numSteps}`).then(
-        createChart
-    );
+$(function () {
+    $('#findGaps').on('click', findGaps);
+    $('#onSubmit').on('click', onSubmit);
 });
 
+function onSubmit(event) {
+    $.get('/config').then(config => {
+        a.hostName = config.host_name;
+        $.get(`/avg?t=${encodeURIComponent(a.daystr)}&m=${a.stepMins}&n=${a.numSteps}`).then(
+            createChart
+        );
+    });
+    event.preventDefault();
+}
+
+function findGaps(event) {
+    $.get('/gaps');
+    event.preventDefault();
+}
 
 function createChart(cdata) {
     var labels = cdata.map(it => it.t /*.substring(11,23)*/);

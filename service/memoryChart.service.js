@@ -47,9 +47,10 @@ async function findFrom(date, jump, limit) {
 }
 
 /**
- * Memory data reports from Mongo.
+ * Print time intervail when memory data is available.
  */
 async function findGaps() {
+  // Min size of gap, ms
   const DELTA = 50000;
 
   let coll = db.collection(COLL_MEM);
@@ -58,7 +59,6 @@ async function findGaps() {
 
   console.log("------------- Gap -------------");
   var cursor = await coll.find({}, { sort: { t: 1 } });
-  var d1 = null;
   var t1 = null;
 
   await cursor.forEach(d2 => {
@@ -75,6 +75,7 @@ async function findGaps() {
     t1 = t2;
   });
   console.log(df(t1));
+  console.log("-------------------------------");
 }
 
 /**
@@ -85,7 +86,11 @@ async function findGaps() {
  */
 async function calcHourlyAverage(dateStamp, stepMins, numSteps) {
 
-  debug(`[calcHourlyAverage] dateStamp=<${dateStamp}>, stepMins=${stepMins}, numSteps=${numSteps}`);
+  console.log("------ calcHourlyAverage ------");
+  console.log(`dateStamp: "${dateStamp}"`);
+  console.log(`stepMins:  ${stepMins}`);
+  console.log(`numSteps:  ${numSteps}`);
+
   let coll = db.collection(COLL_MEM);
   let d1 = Date.parse(dateStamp);
   let d2 = addMinutes(d1, stepMins);
@@ -125,7 +130,7 @@ async function calcHourlyAverage(dateStamp, stepMins, numSteps) {
       });
     }
   }
-  debug('=== result length:', result.length);
+  console.log('=== result length:', result.length);
   return result;
 }
 

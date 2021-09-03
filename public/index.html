@@ -3,6 +3,22 @@
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script src="https://unpkg.com/jquery/dist/jquery.min.js"></script>
 
+<form method="get" name="params">
+    <table>
+        <tr>
+            <td>daystr:</td><td><input type="text" name="daystr"></td>
+        </tr>
+        <tr>
+            <td>stepMins:</td><td><input type="text" name="stepMins"></td>
+        </tr>
+        <tr>
+            <td>numSteps:</td><td><input type="text" name="numSteps"></td>
+        </tr>
+    </table>
+    <button id="findGaps">Find Gaps</button>
+    <button id="onSubmit">Submit</button>
+</form>
+
 <!-- Calculate hourly average values for the specified date. -->
 <script src="javascripts/memoryChart.js"></script>
 
