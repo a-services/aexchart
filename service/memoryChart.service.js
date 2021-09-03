@@ -55,27 +55,36 @@ async function findGaps() {
 
   let coll = db.collection(COLL_MEM);
   let memCount = await coll.countDocuments();
-  console.log("mem count: " + memCount);
+  console.log("db count: " + memCount);
 
   console.log("------------- Gap -------------");
-  var cursor = await coll.find({}, { sort: { t: 1 } });
-  var t1 = null;
+  let cursor = await coll.find({}, { sort: { t: 1 } });
+
+  let t1 = null;
+  let listCount = 0;
 
   await cursor.forEach(d2 => {
     var t2 = d2.t.getTime();
     if (t1) {
-      /* Determine consecutive values with a difference greater than the specified
+      /* Find consecutive values with a difference greater than `DELTA`
        */
       if (t2 - t1 > DELTA) {
         console.log(df(t1) + " -- " + df(t2) + " \t d: " + (t2 - t1));
       }
     } else {
+      /* Print first value
+       */
       console.log(df(t2));
     }
     t1 = t2;
+    listCount++;
   });
+
+  /* Print last value
+   */
   console.log(df(t1));
   console.log("-------------------------------");
+  console.log("ls count: " + listCount);
 }
 
 /**

@@ -14,8 +14,8 @@ var args = {
     },
     aexmem_prod: {
        daystr: '2021-09-01T01:00:00.000+00:00',
-       stepMins: 30,
-       numSteps: 500
+       stepMins: 5,
+       numSteps: 3000
     }
 };
 var a = args['aexmem_prod'];
@@ -30,6 +30,10 @@ $(function () {
 });
 
 function onSubmit(event) {
+    a.daystr = form.elements.daystr.value;
+    a.stepMins = form.elements.stepMins.value;
+    a.numSteps = form.elements.numSteps.value;
+
     $.get('/config').then(config => {
         a.hostName = config.host_name;
         $.get(`/avg?t=${encodeURIComponent(a.daystr)}&m=${a.stepMins}&n=${a.numSteps}`).then(

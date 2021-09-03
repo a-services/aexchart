@@ -16,7 +16,7 @@ const dateFormat = require('dateformat');
   }
 
   function df(date) {
-    return dateFormat(date, "dd.mm hh:MM:ss");
+    return dateFormat(date, "isoUtcDateTime"); //"dd.mm hh:MM:ss");
   }
 
   module.exports = {
