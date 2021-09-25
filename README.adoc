@@ -1,4 +1,4 @@
-= aexchart: Charting data from aexmem and aexlogs
+= aexchart: Charting data from aexmem
 
 == Setup
 
@@ -7,9 +7,6 @@ To add npm-modules to the project run `npm install`
 Before starting the server, you need to create a `.env` file in the root folder of the project with the parameters:
 
 ====
-app_env::
-Environment name
-
 app_port::
 App server port
 
@@ -21,14 +18,9 @@ MongoDB instance url to get data
 
 mem_db::
 Database with memory data
-
-req_db::
-Database with requests data
 ====
 
 == Starting server
-
-Needed type of chart shoul be uncommented in `public/index.html` file.
 
 To start `aexchart` server use `npm start` command.
 
@@ -37,4 +29,3 @@ For debugging: `DEBUG=memoryChart npm test`
 See also::
 - link:https://appery.io/api-express/[Standalone API Express]
 - link:https://github.com/a-services/aexmem[aexmem: Tracking Standalone API Express memory]
-- link:https://github.com/a-services/aexlogs[aexlogs: Analyze logs from Standalone API Express]

@@ -1,7 +1,6 @@
 const express = require('express');
 const path = require('path');
 const memoryChart = require('./service/memoryChart.service');
-const requestChart = require('./service/requestChart.service');
 const config = require('./service/config.service');
 const debug = require('debug')('app');
 
@@ -36,15 +35,6 @@ app.get('/avg', async (req, res, next) => {
   var stepMins = parseInt(req.query.m);
   var numSteps = parseInt(req.query.n);
   await memoryChart.calcHourlyAverage(dateStamp, stepMins, numSteps).then(result => {
-    res.send(result);
-  })
-});
-
-/* Histogram of the number of requests (server load).
- */
-app.get('/req_hist', async (req, res, next) => {
-  var numSteps = parseInt(req.query.n);
-  await requestChart.buildRequestsHistogram(numSteps).then(result => {
     res.send(result);
   })
 });
